@@ -4,67 +4,81 @@ export function renderAppHtml(): string {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#ffffff">
   <title>Greg: Direct Decision Engine</title>
   <meta name="description" content="Research available options, compare what actually matters, verify facts, and get one clear recommendation.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #0b0c0e;
-      --card: #121316;
-      --card-muted: #18191d;
-      --border: #22242a;
-      --border-hover: #32353e;
-      --border-focus: #525666;
-      --text: #f3f4f6;
-      --text-muted: #9ca3af;
-      --text-dim: #6b7280;
-      --accent: #f9fafb;
-      --accent-bg: #1f2127;
-      --tag-bg: #181a20;
-      --tag-border: #2a2d36;
-      --danger: #ef4444;
-      --success: #10b981;
-      --warning: #f59e0b;
-      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      --font-mono: 'JetBrains Mono', "SF Mono", Menlo, Consolas, monospace;
+      --bg: #ffffff;
+      --surface: #ffffff;
+      --surface-subtle: #fafafa;
+      --surface-muted: #f5f5f5;
+      
+      --text-primary: #171717;
+      --text-secondary: #666666;
+      --text-tertiary: #8f8f8f;
+      --text-inverted: #ffffff;
+
+      --accent-blue: #0070f3;
+      --accent-ship: #ff5b4f;
+      --accent-preview: #de1d8d;
+      --accent-develop: #0a72ef;
+      --focus-ring: hsla(212, 100%, 48%, 1);
+
+      /* Vercel Shadow-as-Border tokens */
+      --shadow-border: 0px 0px 0px 1px rgba(0, 0, 0, 0.08);
+      --shadow-border-hover: 0px 0px 0px 1px rgba(0, 0, 0, 0.16);
+      --shadow-card: 0px 0px 0px 1px rgba(0, 0, 0, 0.08), 0px 2px 4px rgba(0, 0, 0, 0.04);
+      --shadow-card-hover: 0px 0px 0px 1px rgba(0, 0, 0, 0.14), 0px 4px 12px rgba(0, 0, 0, 0.06);
+      --shadow-elevated: 0px 0px 0px 1px rgba(0, 0, 0, 0.08), 0px 8px 24px rgba(0, 0, 0, 0.08);
+
+      --radius-sm: 6px;
+      --radius-md: 8px;
+      --radius-lg: 12px;
+
+      --font-sans: 'Geist', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-mono: 'Geist Mono', "SF Mono", Menlo, Consolas, monospace;
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
+      font-feature-settings: "liga" 1, "calt" 1;
     }
 
     body {
       background-color: var(--bg);
-      color: var(--text);
+      color: var(--text-primary);
       font-family: var(--font-sans);
       line-height: 1.5;
       -webkit-font-smoothing: antialiased;
-      padding-bottom: 7rem;
+      -moz-osx-font-smoothing: grayscale;
+      padding-bottom: 8rem;
     }
 
     ::selection {
-      background: #272a33;
-      color: #fff;
+      background: #000000;
+      color: #ffffff;
     }
 
     .container {
-      max-width: 980px;
+      max-width: 960px;
       margin: 0 auto;
       padding: 0 1.5rem;
     }
 
-    /* Top Bar */
+    /* Vercel Top Navigation */
     header {
-      border-bottom: 1px solid var(--border);
-      background: rgba(11, 12, 14, 0.82);
+      background: rgba(255, 255, 255, 0.85);
       backdrop-filter: blur(16px);
       position: sticky;
       top: 0;
       z-index: 50;
+      box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.06);
     }
 
     .header-inner {
@@ -79,24 +93,24 @@ export function renderAppHtml(): string {
       align-items: center;
       gap: 0.65rem;
       text-decoration: none;
-      color: var(--text);
+      color: var(--text-primary);
     }
 
     .logo-badge {
       font-family: var(--font-mono);
       font-weight: 700;
-      font-size: 0.8rem;
-      background: var(--text);
-      color: #000;
-      padding: 0.15rem 0.45rem;
-      border-radius: 4px;
-      letter-spacing: -0.02em;
+      font-size: 0.76rem;
+      background: var(--text-primary);
+      color: #ffffff;
+      padding: 0.2rem 0.5rem;
+      border-radius: var(--radius-sm);
+      letter-spacing: -0.04em;
     }
 
     .logo-title {
-      font-size: 0.95rem;
+      font-size: 0.92rem;
       font-weight: 600;
-      letter-spacing: -0.02em;
+      letter-spacing: -0.025em;
     }
 
     .nav-actions {
@@ -108,252 +122,284 @@ export function renderAppHtml(): string {
     .status-pill {
       font-family: var(--font-mono);
       font-size: 0.72rem;
-      padding: 0.22rem 0.65rem;
+      padding: 0.25rem 0.7rem;
       border-radius: 9999px;
-      border: 1px solid var(--border);
+      box-shadow: var(--shadow-border);
       display: flex;
       align-items: center;
       gap: 0.45rem;
-      color: var(--text-muted);
-      background: var(--card);
+      color: var(--text-secondary);
+      background: var(--surface);
     }
 
     .status-dot {
       width: 6px;
       height: 6px;
       border-radius: 50%;
-      background: var(--text-dim);
+      background: var(--text-tertiary);
     }
 
     .status-dot.active {
-      background: var(--success);
-      box-shadow: 0 0 8px rgba(16, 185, 129, 0.4);
+      background: #10b981;
+      box-shadow: 0 0 6px rgba(16, 185, 129, 0.5);
     }
 
     .status-dot.error {
-      background: var(--danger);
+      background: var(--accent-ship);
     }
 
     .nav-link {
       font-size: 0.82rem;
-      color: var(--text-muted);
+      color: var(--text-secondary);
       text-decoration: none;
       transition: color 0.15s ease;
       cursor: pointer;
     }
 
     .nav-link:hover {
-      color: var(--text);
+      color: var(--text-primary);
     }
 
-    /* Hero */
+    /* Hero Section */
     .hero {
-      padding: 3.5rem 0 2rem;
-      border-bottom: 1px solid var(--border);
-      margin-bottom: 2rem;
+      padding: 4.5rem 0 2.5rem;
+      box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.05);
+      margin-bottom: 2.5rem;
     }
 
     .hero-tag {
       font-family: var(--font-mono);
       font-size: 0.72rem;
+      font-weight: 500;
       text-transform: uppercase;
       letter-spacing: 0.06em;
-      color: var(--text-dim);
-      margin-bottom: 0.75rem;
+      color: var(--text-tertiary);
+      margin-bottom: 0.85rem;
     }
 
     .hero h1 {
-      font-size: 2.25rem;
+      font-size: 2.85rem;
       font-weight: 700;
-      letter-spacing: -0.035em;
-      line-height: 1.2;
-      margin-bottom: 0.75rem;
-      color: #fff;
+      letter-spacing: -0.055em;
+      line-height: 1.08;
+      margin-bottom: 1rem;
+      color: var(--text-primary);
+      text-wrap: balance;
     }
 
     .hero p {
-      font-size: 1.05rem;
-      color: var(--text-muted);
-      max-width: 720px;
-      line-height: 1.6;
+      font-size: 1.12rem;
+      color: var(--text-secondary);
+      max-width: 680px;
+      line-height: 1.55;
+      text-wrap: pretty;
     }
 
-    /* Quick Examples Chips */
+    /* Quick Examples Pills */
     .examples-bar {
       display: flex;
       flex-wrap: wrap;
       align-items: center;
       gap: 0.5rem;
-      margin-top: 1.25rem;
+      margin-top: 1.6rem;
     }
 
     .examples-label {
       font-family: var(--font-mono);
       font-size: 0.72rem;
-      color: var(--text-dim);
+      color: var(--text-tertiary);
       margin-right: 0.25rem;
     }
 
     .example-chip {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      padding: 0.25rem 0.6rem;
+      background: var(--surface);
+      box-shadow: var(--shadow-border);
+      border: none;
+      border-radius: var(--radius-sm);
+      padding: 0.35rem 0.75rem;
       font-size: 0.78rem;
-      color: var(--text-muted);
+      font-family: var(--font-sans);
+      color: var(--text-secondary);
       cursor: pointer;
-      transition: all 0.15s ease;
+      transition: box-shadow 0.15s ease, color 0.15s ease, background-color 0.15s ease;
     }
 
     .example-chip:hover {
-      border-color: var(--border-hover);
-      color: var(--text);
-      background: var(--card-muted);
+      box-shadow: var(--shadow-border-hover);
+      color: var(--text-primary);
+      background-color: var(--surface-subtle);
     }
 
-    /* Alert Banner */
+    .example-chip:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 2px var(--focus-ring);
+    }
+
+    /* System Configuration Alert */
     #system-alert {
       display: none;
-      background: rgba(239, 68, 68, 0.06);
-      border: 1px solid rgba(239, 68, 68, 0.22);
-      border-radius: 6px;
-      padding: 1.1rem 1.35rem;
-      margin-bottom: 2rem;
+      background: #fff8f8;
+      box-shadow: 0 0 0 1px rgba(255, 91, 79, 0.25);
+      border-radius: var(--radius-md);
+      padding: 1.25rem 1.4rem;
+      margin-bottom: 2.5rem;
       font-size: 0.88rem;
     }
 
     #system-alert h3 {
       font-size: 0.82rem;
       font-family: var(--font-mono);
-      color: var(--danger);
+      color: var(--accent-ship);
       margin-bottom: 0.35rem;
       text-transform: uppercase;
       letter-spacing: 0.04em;
     }
 
     #system-alert p {
-      color: var(--text-muted);
+      color: var(--text-secondary);
       margin-bottom: 0.5rem;
     }
 
     #system-alert code {
       font-family: var(--font-mono);
       font-size: 0.78rem;
-      background: #000;
+      background: var(--surface);
       padding: 0.2rem 0.4rem;
-      border-radius: 3px;
-      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      box-shadow: var(--shadow-border);
     }
 
-    /* Form Section */
+    /* Decision Form */
     .form-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 1.6rem;
+      background: var(--surface);
+      box-shadow: var(--shadow-card);
+      border-radius: var(--radius-lg);
+      padding: 1.85rem;
       margin-bottom: 2.5rem;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+      transition: box-shadow 0.2s ease;
+    }
+
+    .form-card:hover {
+      box-shadow: var(--shadow-card-hover);
     }
 
     .form-group {
-      margin-bottom: 1.25rem;
+      margin-bottom: 1.4rem;
     }
 
     label {
       display: flex;
       justify-content: space-between;
       align-items: baseline;
-      font-size: 0.76rem;
+      font-size: 0.74rem;
       font-family: var(--font-mono);
       text-transform: uppercase;
       letter-spacing: 0.04em;
-      color: var(--text-muted);
-      margin-bottom: 0.5rem;
+      color: var(--text-secondary);
+      margin-bottom: 0.55rem;
+      cursor: pointer;
     }
 
     .label-hint {
       text-transform: none;
       letter-spacing: normal;
-      color: var(--text-dim);
-      font-size: 0.72rem;
+      color: var(--text-tertiary);
+      font-size: 0.74rem;
     }
 
     input[type="text"], textarea {
       width: 100%;
-      background: #07080a;
-      border: 1px solid var(--border);
-      color: var(--text);
-      padding: 0.85rem 1.05rem;
-      font-size: 0.95rem;
+      background: #ffffff;
+      box-shadow: var(--shadow-border);
+      border: none;
+      color: var(--text-primary);
+      padding: 0.85rem 1rem;
+      font-size: 1rem; /* iOS zoom prevention */
       font-family: var(--font-sans);
-      border-radius: 6px;
+      border-radius: var(--radius-sm);
       outline: none;
-      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+      transition: box-shadow 0.15s ease;
+      line-height: 1.5;
     }
 
-    input[type="text"]:focus, textarea:focus {
-      border-color: var(--border-focus);
-      box-shadow: 0 0 0 1px var(--border-focus);
+    input[type="text"]::placeholder, textarea::placeholder {
+      color: var(--text-tertiary);
+    }
+
+    input[type="text"]:hover, textarea:hover {
+      box-shadow: var(--shadow-border-hover);
+    }
+
+    input[type="text"]:focus-visible, textarea:focus-visible {
+      box-shadow: 0 0 0 2px var(--focus-ring);
     }
 
     textarea {
       resize: vertical;
-      min-height: 72px;
-      line-height: 1.5;
+      min-height: 76px;
     }
 
     .form-bottom {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding-top: 0.5rem;
+      padding-top: 0.4rem;
     }
 
     .active-engine-info {
       font-family: var(--font-mono);
-      font-size: 0.72rem;
-      color: var(--text-dim);
+      font-size: 0.74rem;
+      color: var(--text-tertiary);
     }
 
     button.btn-primary {
-      background: var(--accent);
-      color: #000;
+      background: var(--text-primary);
+      color: var(--text-inverted);
       border: none;
       font-family: var(--font-sans);
-      font-weight: 600;
-      font-size: 0.85rem;
-      padding: 0.72rem 1.7rem;
-      border-radius: 5px;
+      font-weight: 500;
+      font-size: 0.88rem;
+      letter-spacing: -0.01em;
+      padding: 0.65rem 1.45rem;
+      border-radius: var(--radius-sm);
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       gap: 0.5rem;
-      transition: opacity 0.15s ease, transform 0.1s ease;
+      box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.08);
+      transition: background-color 0.15s ease, opacity 0.15s ease, transform 0.05s ease;
     }
 
     button.btn-primary:hover {
-      opacity: 0.92;
+      background: #000000;
     }
 
     button.btn-primary:active {
       transform: scale(0.99);
     }
 
+    button.btn-primary:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px var(--focus-ring);
+    }
+
     button.btn-primary:disabled {
-      opacity: 0.4;
+      opacity: 0.45;
       cursor: not-allowed;
     }
 
     button.btn-secondary {
-      background: transparent;
-      color: var(--text-muted);
-      border: 1px solid var(--border);
-      font-family: var(--font-mono);
-      font-size: 0.75rem;
-      padding: 0.35rem 0.75rem;
-      border-radius: 4px;
+      background: var(--surface);
+      color: var(--text-secondary);
+      border: none;
+      box-shadow: var(--shadow-border);
+      font-family: var(--font-sans);
+      font-size: 0.78rem;
+      font-weight: 500;
+      padding: 0.4rem 0.85rem;
+      border-radius: var(--radius-sm);
       cursor: pointer;
-      transition: all 0.15s ease;
+      transition: box-shadow 0.15s ease, color 0.15s ease, background-color 0.15s ease;
       text-decoration: none;
       display: inline-flex;
       align-items: center;
@@ -361,26 +407,32 @@ export function renderAppHtml(): string {
     }
 
     button.btn-secondary:hover {
-      border-color: var(--border-hover);
-      color: var(--text);
+      box-shadow: var(--shadow-border-hover);
+      color: var(--text-primary);
+      background-color: var(--surface-subtle);
+    }
+
+    button.btn-secondary:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 2px var(--focus-ring);
     }
 
     /* Loader */
     #loader {
       display: none;
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 8px;
+      background: var(--surface);
+      box-shadow: var(--shadow-card);
+      border-radius: var(--radius-lg);
       padding: 3.5rem 1.5rem;
       text-align: center;
       margin-bottom: 2.5rem;
     }
 
     .spinner {
-      width: 24px;
-      height: 24px;
-      border: 2px solid var(--border);
-      border-top-color: var(--text);
+      width: 22px;
+      height: 22px;
+      border: 2px solid rgba(0, 0, 0, 0.1);
+      border-top-color: var(--text-primary);
       border-radius: 50%;
       animation: spin 0.65s linear infinite;
       margin: 0 auto 1.15rem;
@@ -392,14 +444,15 @@ export function renderAppHtml(): string {
 
     .loader-title {
       font-weight: 600;
-      font-size: 0.98rem;
+      font-size: 0.95rem;
+      letter-spacing: -0.02em;
       margin-bottom: 0.35rem;
     }
 
     .loader-sub {
       font-family: var(--font-mono);
       font-size: 0.78rem;
-      color: var(--text-dim);
+      color: var(--text-tertiary);
     }
 
     /* Result View */
@@ -415,11 +468,11 @@ export function renderAppHtml(): string {
 
     /* Winner Banner Card */
     .winner-card {
-      background: var(--card);
-      border: 1px solid #3b3f4d;
-      border-radius: 8px;
-      padding: 2.2rem;
-      margin-bottom: 2.2rem;
+      background: var(--surface);
+      box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.14), 0px 8px 30px rgba(0, 0, 0, 0.06);
+      border-radius: var(--radius-lg);
+      padding: 2.25rem;
+      margin-bottom: 2.5rem;
       position: relative;
     }
 
@@ -442,41 +495,42 @@ export function renderAppHtml(): string {
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.05em;
-      background: var(--text);
-      color: #000;
+      background: var(--text-primary);
+      color: #ffffff;
       padding: 0.22rem 0.6rem;
-      border-radius: 4px;
+      border-radius: var(--radius-sm);
     }
 
     .confidence-badge {
       font-family: var(--font-mono);
       font-size: 0.7rem;
       padding: 0.2rem 0.55rem;
-      border-radius: 4px;
-      border: 1px solid var(--border);
-      color: var(--text-muted);
-      background: var(--card-muted);
+      border-radius: var(--radius-sm);
+      box-shadow: var(--shadow-border);
+      color: var(--text-secondary);
+      background: var(--surface-subtle);
     }
 
     .meta-time {
       font-family: var(--font-mono);
       font-size: 0.75rem;
-      color: var(--text-dim);
+      color: var(--text-tertiary);
+      font-variant-numeric: tabular-nums;
     }
 
     .winner-name {
-      font-size: 2.2rem;
+      font-size: 2.4rem;
       font-weight: 700;
-      letter-spacing: -0.035em;
-      line-height: 1.15;
+      letter-spacing: -0.05em;
+      line-height: 1.12;
       margin-bottom: 0.5rem;
-      color: #fff;
+      color: var(--text-primary);
     }
 
     .winner-tagline {
       font-size: 1.1rem;
-      color: var(--text-muted);
-      margin-bottom: 1.75rem;
+      color: var(--text-secondary);
+      margin-bottom: 1.85rem;
       line-height: 1.5;
     }
 
@@ -485,13 +539,13 @@ export function renderAppHtml(): string {
       font-size: 0.74rem;
       text-transform: uppercase;
       letter-spacing: 0.05em;
-      color: var(--text-dim);
-      margin-bottom: 0.6rem;
+      color: var(--text-tertiary);
+      margin-bottom: 0.65rem;
     }
 
     .reasons-list {
       list-style-type: none;
-      margin-bottom: 1.75rem;
+      margin-bottom: 1.85rem;
     }
 
     .reasons-list li {
@@ -499,22 +553,22 @@ export function renderAppHtml(): string {
       padding-left: 1.35rem;
       margin-bottom: 0.6rem;
       font-size: 0.95rem;
-      color: var(--text);
+      color: var(--text-primary);
       line-height: 1.5;
     }
 
     .reasons-list li::before {
-      content: "-";
+      content: "→";
       position: absolute;
       left: 0;
-      color: var(--text-dim);
-      font-weight: bold;
+      color: var(--text-primary);
+      font-weight: 600;
     }
 
     .tradeoff-box {
-      background: #090a0d;
-      border: 1px solid var(--border);
-      border-radius: 6px;
+      background: var(--surface-subtle);
+      box-shadow: var(--shadow-border);
+      border-radius: var(--radius-md);
       padding: 1rem 1.25rem;
       font-size: 0.9rem;
     }
@@ -523,7 +577,7 @@ export function renderAppHtml(): string {
       font-family: var(--font-mono);
       font-size: 0.72rem;
       text-transform: uppercase;
-      color: var(--text-dim);
+      color: var(--text-tertiary);
       margin-bottom: 0.35rem;
       letter-spacing: 0.04em;
     }
@@ -532,29 +586,29 @@ export function renderAppHtml(): string {
     .result-actions-bar {
       display: flex;
       justify-content: flex-end;
-      gap: 0.6rem;
-      margin-top: 1.5rem;
-      padding-top: 1.25rem;
-      border-top: 1px solid var(--border);
+      gap: 0.65rem;
+      margin-top: 1.6rem;
+      padding-top: 1.35rem;
+      box-shadow: 0px -1px 0px 0px rgba(0, 0, 0, 0.06);
     }
 
     /* Section Headers */
     .section-header {
       font-family: var(--font-mono);
-      font-size: 0.76rem;
+      font-size: 0.74rem;
       text-transform: uppercase;
       letter-spacing: 0.05em;
-      color: var(--text-dim);
-      margin: 2.75rem 0 0.85rem;
+      color: var(--text-tertiary);
+      margin: 2.85rem 0 0.85rem;
     }
 
-    /* Matrix Table */
+    /* Comparison Table (Tabular Numbers) */
     .matrix-wrapper {
-      border: 1px solid var(--border);
-      border-radius: 8px;
+      box-shadow: var(--shadow-card);
+      border-radius: var(--radius-lg);
       overflow-x: auto;
-      background: var(--card);
-      margin-bottom: 2rem;
+      background: var(--surface);
+      margin-bottom: 2.5rem;
     }
 
     table {
@@ -565,11 +619,12 @@ export function renderAppHtml(): string {
     }
 
     th, td {
-      padding: 0.95rem 1.2rem;
-      border-bottom: 1px solid var(--border);
-      border-right: 1px solid var(--border);
+      padding: 1rem 1.25rem;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+      border-right: 1px solid rgba(0, 0, 0, 0.06);
       vertical-align: top;
       line-height: 1.5;
+      font-variant-numeric: tabular-nums;
     }
 
     th:last-child, td:last-child {
@@ -581,21 +636,21 @@ export function renderAppHtml(): string {
     }
 
     th {
-      background: #0d0e12;
+      background: var(--surface-subtle);
       font-family: var(--font-mono);
-      font-size: 0.75rem;
+      font-size: 0.74rem;
       text-transform: uppercase;
       letter-spacing: 0.04em;
       font-weight: 600;
-      color: var(--text-muted);
+      color: var(--text-secondary);
     }
 
     td.metric-col {
       font-family: var(--font-mono);
       font-size: 0.78rem;
-      color: var(--text-dim);
-      background: rgba(0, 0, 0, 0.25);
-      width: 25%;
+      color: var(--text-secondary);
+      background: var(--surface-subtle);
+      width: 26%;
     }
 
     /* 3 Columns Grid */
@@ -603,7 +658,7 @@ export function renderAppHtml(): string {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 1.25rem;
-      margin-bottom: 2rem;
+      margin-bottom: 2.5rem;
     }
 
     @media (max-width: 820px) {
@@ -613,9 +668,9 @@ export function renderAppHtml(): string {
     }
 
     .info-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 8px;
+      background: var(--surface);
+      box-shadow: var(--shadow-card);
+      border-radius: var(--radius-lg);
       padding: 1.35rem;
     }
 
@@ -624,16 +679,16 @@ export function renderAppHtml(): string {
       font-size: 0.72rem;
       text-transform: uppercase;
       letter-spacing: 0.05em;
-      color: var(--text-dim);
+      color: var(--text-tertiary);
       margin-bottom: 0.85rem;
-      border-bottom: 1px solid var(--border);
       padding-bottom: 0.5rem;
+      box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.06);
     }
 
     .info-card ul {
       list-style-type: none;
       font-size: 0.84rem;
-      color: var(--text-muted);
+      color: var(--text-secondary);
       line-height: 1.5;
     }
 
@@ -647,7 +702,7 @@ export function renderAppHtml(): string {
       content: "•";
       position: absolute;
       left: 0;
-      color: var(--text-dim);
+      color: var(--text-tertiary);
     }
 
     /* 2 Columns Grid */
@@ -655,7 +710,7 @@ export function renderAppHtml(): string {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 1.25rem;
-      margin-bottom: 2rem;
+      margin-bottom: 2.5rem;
     }
 
     @media (max-width: 768px) {
@@ -666,11 +721,11 @@ export function renderAppHtml(): string {
 
     /* Source Citations */
     .sources-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 8px;
+      background: var(--surface);
+      box-shadow: var(--shadow-card);
+      border-radius: var(--radius-lg);
       padding: 1.35rem;
-      margin-bottom: 2rem;
+      margin-bottom: 2.5rem;
     }
 
     .sources-list {
@@ -690,38 +745,39 @@ export function renderAppHtml(): string {
     .source-index {
       font-family: var(--font-mono);
       font-size: 0.7rem;
-      background: var(--card-muted);
-      padding: 0.1rem 0.45rem;
-      border-radius: 3px;
-      border: 1px solid var(--border);
-      color: var(--text-dim);
+      background: var(--surface-subtle);
+      padding: 0.15rem 0.45rem;
+      border-radius: var(--radius-sm);
+      box-shadow: var(--shadow-border);
+      color: var(--text-tertiary);
       flex-shrink: 0;
     }
 
     .source-link {
-      color: var(--text);
-      text-decoration: none;
-      border-bottom: 1px solid var(--border);
-      transition: border-color 0.15s ease;
+      color: var(--text-primary);
+      text-decoration: underline;
+      text-decoration-color: rgba(0, 0, 0, 0.2);
+      text-underline-offset: 3px;
+      transition: text-decoration-color 0.15s ease;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
     }
 
     .source-link:hover {
-      border-color: var(--text);
+      text-decoration-color: var(--text-primary);
     }
 
     .source-domain {
       font-family: var(--font-mono);
       font-size: 0.72rem;
-      color: var(--text-dim);
+      color: var(--text-tertiary);
       flex-shrink: 0;
     }
 
     /* History Section */
     .history-section {
-      border-top: 1px solid var(--border);
+      box-shadow: 0px -1px 0px 0px rgba(0, 0, 0, 0.06);
       padding-top: 2.5rem;
       margin-top: 3.5rem;
     }
@@ -740,60 +796,62 @@ export function renderAppHtml(): string {
     }
 
     .history-item {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 6px;
+      background: var(--surface);
+      box-shadow: var(--shadow-card);
+      border-radius: var(--radius-md);
       padding: 0.95rem 1.25rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
       cursor: pointer;
-      transition: all 0.15s ease;
+      transition: box-shadow 0.15s ease, background-color 0.15s ease;
       text-decoration: none;
-      color: var(--text);
+      color: var(--text-primary);
     }
 
     .history-item:hover {
-      border-color: var(--border-hover);
-      background: var(--card-muted);
+      box-shadow: var(--shadow-card-hover);
+      background-color: var(--surface-subtle);
     }
 
     .history-topic {
       font-weight: 500;
       font-size: 0.92rem;
+      letter-spacing: -0.015em;
       margin-bottom: 0.25rem;
     }
 
     .history-meta {
       font-family: var(--font-mono);
       font-size: 0.72rem;
-      color: var(--text-dim);
+      color: var(--text-tertiary);
+      font-variant-numeric: tabular-nums;
     }
 
     .history-winner {
       font-family: var(--font-mono);
       font-size: 0.8rem;
-      color: var(--text);
+      color: var(--text-primary);
       text-align: right;
     }
 
     .history-delete-btn {
       background: transparent;
       border: none;
-      color: var(--text-dim);
+      color: var(--text-tertiary);
       cursor: pointer;
       font-size: 0.9rem;
       padding: 0.2rem 0.5rem;
-      border-radius: 3px;
+      border-radius: var(--radius-sm);
       transition: color 0.15s ease;
       margin-left: 0.75rem;
     }
 
     .history-delete-btn:hover {
-      color: var(--danger);
+      color: var(--accent-ship);
     }
 
-    /* Toast & Floating Notification Banner (Bottom Right) */
+    /* Bottom-Right Notifications (Vercel Style) */
     #toast-container {
       position: fixed;
       bottom: 24px;
@@ -802,24 +860,23 @@ export function renderAppHtml(): string {
       display: flex;
       flex-direction: column-reverse;
       gap: 0.75rem;
-      max-width: 440px;
+      max-width: 420px;
       width: calc(100vw - 48px);
       pointer-events: none;
     }
 
     .toast-card {
-      background: #14151a;
-      border: 1px solid var(--border-hover);
-      border-radius: 8px;
+      background: #ffffff;
+      box-shadow: var(--shadow-elevated);
+      border-radius: var(--radius-md);
       padding: 1rem 1.25rem;
-      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.6);
       pointer-events: auto;
       display: flex;
       align-items: flex-start;
       gap: 0.85rem;
-      transform: translateY(8px);
+      transform: translateY(10px);
       opacity: 0;
-      transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease;
     }
 
     .toast-card.show {
@@ -828,18 +885,11 @@ export function renderAppHtml(): string {
     }
 
     .toast-card.error {
-      border-color: rgba(239, 68, 68, 0.35);
-      background: #171113;
+      box-shadow: 0 0 0 1px rgba(255, 91, 79, 0.35), 0px 8px 24px rgba(255, 91, 79, 0.12);
     }
 
     .toast-card.success {
-      border-color: rgba(16, 185, 129, 0.35);
-      background: #101714;
-    }
-
-    .toast-card.info {
-      border-color: rgba(99, 102, 241, 0.35);
-      background: #12131c;
+      box-shadow: 0 0 0 1px rgba(16, 185, 129, 0.35), 0px 8px 24px rgba(16, 185, 129, 0.12);
     }
 
     .toast-icon {
@@ -857,14 +907,14 @@ export function renderAppHtml(): string {
     .toast-title {
       font-size: 0.86rem;
       font-weight: 600;
-      letter-spacing: -0.01em;
+      letter-spacing: -0.015em;
       margin-bottom: 0.25rem;
-      color: #fff;
+      color: var(--text-primary);
     }
 
     .toast-message {
       font-size: 0.8rem;
-      color: var(--text-muted);
+      color: var(--text-secondary);
       line-height: 1.45;
       word-break: break-word;
     }
@@ -872,7 +922,7 @@ export function renderAppHtml(): string {
     .toast-close {
       background: transparent;
       border: none;
-      color: var(--text-dim);
+      color: var(--text-tertiary);
       cursor: pointer;
       font-size: 1rem;
       line-height: 1;
@@ -882,7 +932,7 @@ export function renderAppHtml(): string {
     }
 
     .toast-close:hover {
-      color: #fff;
+      color: var(--text-primary);
     }
   </style>
 </head>
@@ -897,7 +947,7 @@ export function renderAppHtml(): string {
       <div class="nav-actions">
         <div id="system-status-pill" class="status-pill">
           <span id="status-dot" class="status-dot"></span>
-          <span id="status-text">Checking status...</span>
+          <span id="status-text">Checking status…</span>
         </div>
         <a href="#history" class="nav-link">History</a>
         <a href="https://github.com/anosistaken/ResearchingAgent" target="_blank" rel="noopener noreferrer" class="nav-link">GitHub</a>
@@ -919,7 +969,7 @@ export function renderAppHtml(): string {
       </div>
     </section>
 
-    <!-- Configuration Needed Banner -->
+    <!-- Configuration Alert Banner -->
     <div id="system-alert">
       <h3 id="alert-title">Configuration Needed</h3>
       <p id="alert-msg">Missing server environment keys.</p>
@@ -938,12 +988,11 @@ export function renderAppHtml(): string {
             type="text" 
             id="topic" 
             name="topic" 
-            placeholder="e.g. PostgreSQL vs MongoDB vs ClickHouse for high-write event logs" 
+            placeholder="e.g. PostgreSQL vs MongoDB vs ClickHouse for high-write event logs…" 
             required 
             minlength="3" 
             maxlength="500"
             autocomplete="off"
-            autofocus
           >
         </div>
 
@@ -956,13 +1005,13 @@ export function renderAppHtml(): string {
             id="constraints" 
             name="constraints" 
             rows="2" 
-            placeholder="e.g. Solo developer, under $100/mo cloud cost, 15M writes/day, no Kubernetes"
+            placeholder="e.g. Solo developer, under $100/mo cloud cost, 15M writes/day, no Kubernetes…"
             maxlength="1000"
           ></textarea>
         </div>
 
         <div class="form-bottom">
-          <div id="engine-hint" class="active-engine-info">Checking server readiness...</div>
+          <div id="engine-hint" class="active-engine-info">Checking server readiness…</div>
           <button type="submit" id="submit-btn" class="btn-primary">
             <span>Decide for me</span>
           </button>
@@ -974,7 +1023,7 @@ export function renderAppHtml(): string {
     <div id="loader">
       <div class="spinner"></div>
       <div class="loader-title">Researching and verifying options</div>
-      <div class="loader-sub">Pulls live web search, checks sources, and runs decision synthesis...</div>
+      <div class="loader-sub">Pulls live web search, checks sources, and runs decision synthesis…</div>
     </div>
 
     <!-- Results Display -->
@@ -1064,7 +1113,7 @@ export function renderAppHtml(): string {
     </section>
   </main>
 
-  <div id="toast-container"></div>
+  <div id="toast-container" aria-live="polite"></div>
 
   <script>
     let currentDecision = null;
@@ -1112,7 +1161,6 @@ export function renderAppHtml(): string {
       closeBtn.addEventListener('click', dismiss);
       toastContainer.appendChild(card);
 
-      // Trigger animation
       requestAnimationFrame(() => card.classList.add('show'));
 
       if (duration > 0) {
@@ -1248,7 +1296,6 @@ export function renderAppHtml(): string {
         if (!response.ok) {
           const rawError = data.error || 'Decision evaluation failed';
 
-          // Friendly, clear notification for missing configuration
           if (rawError.includes('No LLM provider is configured') || rawError.includes('No Web Search provider')) {
             notify({
               title: 'API Configuration Required',
@@ -1300,7 +1347,6 @@ export function renderAppHtml(): string {
       currentDecision = record;
       const c = record.consensus;
 
-      // Header & Winner
       document.getElementById('res-winner').textContent = c.winner;
       document.getElementById('res-tagline').textContent = c.tagline;
       document.getElementById('res-confidence').textContent = \`Confidence: \${c.confidence}\`;
@@ -1308,14 +1354,11 @@ export function renderAppHtml(): string {
 
       exportMdBtn.href = \`/api/decisions/\${record.id}/export\`;
 
-      // Why it wins
       const reasonsList = document.getElementById('res-reasons');
       reasonsList.innerHTML = c.whyItWins.map(r => \`<li>\${escapeHtml(r)}</li>\`).join('');
 
-      // Tradeoff
       document.getElementById('res-tradeoff').textContent = c.mainTradeoff;
 
-      // Matrix
       const thead = document.getElementById('matrix-head');
       const tbody = document.getElementById('matrix-body');
 
@@ -1333,16 +1376,13 @@ export function renderAppHtml(): string {
         </tr>
       \`).join('');
 
-      // Facts, Assumptions, Unknowns
       document.getElementById('res-facts').innerHTML = (c.verifiedFacts || []).map(f => \`<li>\${escapeHtml(f)}</li>\`).join('') || '<li>None recorded</li>';
       document.getElementById('res-assumptions').innerHTML = (c.assumptions || []).map(a => \`<li>\${escapeHtml(a)}</li>\`).join('') || '<li>None recorded</li>';
       document.getElementById('res-unknowns').innerHTML = (c.unknowns || []).map(u => \`<li>\${escapeHtml(u)}</li>\`).join('') || '<li>None identified</li>';
 
-      // Rejected & Fluff
       document.getElementById('res-rejected').innerHTML = (c.rejectedAlternatives || []).map(r => \`<li><strong>\${escapeHtml(r.name)}</strong>: \${escapeHtml(r.reasonRejected)}</li>\`).join('') || '<li>No alternatives evaluated</li>';
       document.getElementById('res-fluff').innerHTML = (c.discardedFluff || []).map(f => \`<li>\${escapeHtml(f)}</li>\`).join('') || '<li>No marketing claims cut</li>';
 
-      // Sources
       const sourcesDiv = document.getElementById('res-sources');
       sourcesDiv.innerHTML = record.sources.map(s => \`
         <div class="source-item">
