@@ -793,29 +793,96 @@ export function renderAppHtml(): string {
       color: var(--danger);
     }
 
-    /* Toast Notification */
-    #toast {
+    /* Toast & Floating Notification Banner */
+    #toast-container {
       position: fixed;
-      bottom: 24px;
+      top: 24px;
       right: 24px;
-      background: #18191d;
-      border: 1px solid var(--border-hover);
-      color: var(--text);
-      font-size: 0.82rem;
-      font-family: var(--font-mono);
-      padding: 0.65rem 1.1rem;
-      border-radius: 6px;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
-      opacity: 0;
-      transform: translateY(10px);
-      transition: all 0.2s ease;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      max-width: 440px;
+      width: calc(100vw - 48px);
       pointer-events: none;
-      z-index: 100;
     }
 
-    #toast.show {
-      opacity: 1;
+    .toast-card {
+      background: #14151a;
+      border: 1px solid var(--border-hover);
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.6);
+      pointer-events: auto;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.85rem;
+      transform: translateY(-8px);
+      opacity: 0;
+      transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .toast-card.show {
       transform: translateY(0);
+      opacity: 1;
+    }
+
+    .toast-card.error {
+      border-color: rgba(239, 68, 68, 0.35);
+      background: #171113;
+    }
+
+    .toast-card.success {
+      border-color: rgba(16, 185, 129, 0.35);
+      background: #101714;
+    }
+
+    .toast-card.info {
+      border-color: rgba(99, 102, 241, 0.35);
+      background: #12131c;
+    }
+
+    .toast-icon {
+      font-size: 0.95rem;
+      line-height: 1.2;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .toast-body {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .toast-title {
+      font-size: 0.86rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      margin-bottom: 0.25rem;
+      color: #fff;
+    }
+
+    .toast-message {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      line-height: 1.45;
+      word-break: break-word;
+    }
+
+    .toast-close {
+      background: transparent;
+      border: none;
+      color: var(--text-dim);
+      cursor: pointer;
+      font-size: 1rem;
+      line-height: 1;
+      padding: 0.1rem 0.25rem;
+      margin-left: 0.25rem;
+      transition: color 0.15s ease;
+    }
+
+    .toast-close:hover {
+      color: #fff;
     }
   </style>
 </head>
@@ -997,7 +1064,7 @@ export function renderAppHtml(): string {
     </section>
   </main>
 
-  <div id="toast">Copied to clipboard</div>
+  <div id="toast-container"></div>
 
   <script>
     let currentDecision = null;
@@ -1014,13 +1081,47 @@ export function renderAppHtml(): string {
     const statusText = document.getElementById('status-text');
     const engineHint = document.getElementById('engine-hint');
     const historyContainer = document.getElementById('history-container');
-    const toast = document.getElementById('toast');
     const exportMdBtn = document.getElementById('export-md-btn');
+    const toastContainer = document.getElementById('toast-container');
+
+    function notify({ title, message, type = 'info', duration = 4500 }) {
+      const card = document.createElement('div');
+      card.className = \`toast-card \${type}\`;
+
+      const iconMap = {
+        error: '⚠️',
+        success: '✓',
+        info: 'ℹ'
+      };
+
+      card.innerHTML = \`
+        <span class="toast-icon">\${iconMap[type] || 'ℹ'}</span>
+        <div class="toast-body">
+          <div class="toast-title">\${escapeHtml(title)}</div>
+          <div class="toast-message">\${escapeHtml(message)}</div>
+        </div>
+        <button type="button" class="toast-close" title="Dismiss">&times;</button>
+      \`;
+
+      const closeBtn = card.querySelector('.toast-close');
+      const dismiss = () => {
+        card.classList.remove('show');
+        setTimeout(() => card.remove(), 250);
+      };
+
+      closeBtn.addEventListener('click', dismiss);
+      toastContainer.appendChild(card);
+
+      // Trigger animation
+      requestAnimationFrame(() => card.classList.add('show'));
+
+      if (duration > 0) {
+        setTimeout(dismiss, duration);
+      }
+    }
 
     function showToast(msg) {
-      toast.textContent = msg;
-      toast.classList.add('show');
-      setTimeout(() => toast.classList.remove('show'), 2000);
+      notify({ title: 'Notice', message: msg, type: 'info', duration: 2500 });
     }
 
     function setExample(topic, constraints) {
@@ -1087,9 +1188,19 @@ export function renderAppHtml(): string {
         if (res.ok) {
           const decision = await res.json();
           renderDecision(decision);
+        } else {
+          notify({
+            title: 'Load Failed',
+            message: 'Could not find or retrieve that saved decision.',
+            type: 'error'
+          });
         }
       } catch (err) {
-        alert('Could not load decision: ' + err.message);
+        notify({
+          title: 'Network Error',
+          message: err.message || 'Failed to communicate with server.',
+          type: 'error'
+        });
       }
     }
 
@@ -1100,14 +1211,16 @@ export function renderAppHtml(): string {
       try {
         const res = await fetch(\`/api/decisions/\${id}\`, { method: 'DELETE' });
         if (res.ok) {
-          showToast('Decision deleted');
+          notify({ title: 'Success', message: 'Decision record deleted.', type: 'success' });
           loadHistory();
           if (currentDecision && currentDecision.id === id) {
             resultView.style.display = 'none';
           }
+        } else {
+          notify({ title: 'Delete Failed', message: 'Could not delete decision from database.', type: 'error' });
         }
       } catch (err) {
-        alert('Delete failed: ' + err.message);
+        notify({ title: 'Error', message: err.message || 'Failed to delete record.', type: 'error' });
       }
     }
 
@@ -1133,13 +1246,50 @@ export function renderAppHtml(): string {
         const data = await response.json();
 
         if (!response.ok) {
-          throw new Error(data.error || 'Decision evaluation failed');
+          const rawError = data.error || 'Decision evaluation failed';
+
+          // Friendly, clear notification for missing configuration
+          if (rawError.includes('No LLM provider is configured') || rawError.includes('No Web Search provider')) {
+            notify({
+              title: 'API Configuration Required',
+              message: rawError.replace('Please add ', '').replace('to your .env file.', 'Add this to your local .env file to enable live research.'),
+              type: 'error',
+              duration: 8000
+            });
+            systemAlert.style.display = 'block';
+            systemAlert.scrollIntoView({ behavior: 'smooth' });
+          } else if (response.status === 429) {
+            notify({
+              title: 'Rate Limit Reached',
+              message: rawError,
+              type: 'error',
+              duration: 6000
+            });
+          } else {
+            notify({
+              title: 'Decision Error',
+              message: rawError,
+              type: 'error',
+              duration: 7000
+            });
+          }
+          return;
         }
 
         renderDecision(data);
         loadHistory();
+        notify({
+          title: 'Decision Ready',
+          message: \`Recommended pick: \${data.consensus.winner}\`,
+          type: 'success',
+          duration: 3500
+        });
       } catch (error) {
-        alert('Decision error: ' + error.message);
+        notify({
+          title: 'Connection Error',
+          message: error.message || 'Server is offline or unreachable.',
+          type: 'error'
+        });
       } finally {
         submitBtn.disabled = false;
         loader.style.display = 'none';
