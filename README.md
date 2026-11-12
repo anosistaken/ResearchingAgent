@@ -15,8 +15,8 @@
 - **Facts vs Assumptions vs Unknowns**: Separates proven facts from working assumptions and unverified unknowns. Never guesses.
 - **Explains Rejections**: Clear rationale for why alternative contenders were dismissed.
 - **Noise Filter**: Deliberately identifies and discards marketing buzzwords, superficial feature lists, and synthetic benchmarks.
-- **Local Persistence**: Stores past decisions in an embedded SQLite database (`data/greg.db`) for immediate review.
-- **Premium Minimalist Interface**: Linear-inspired dark UI with zero bloat, plus terminal CLI support.
+- **Local Persistence & Export**: Stores past decisions in an embedded SQLite database (`data/greg.db`) with one-click Markdown download and clipboard sharing.
+- **Editorial Dark UI**: Linear-inspired dark interface with typography, quick presets, zero-framework lightweight runtime, plus interactive terminal CLI.
 
 ---
 
@@ -45,7 +45,7 @@
              └─ Discarded Marketing Fluff
              │
              ▼
-   [ SQLite Persistence ] (data/greg.db)
+   [ SQLite Persistence & Export ] (data/greg.db + Markdown)
 ```
 
 ---
@@ -57,7 +57,7 @@
 - **Validation**: Zod (strict payload validation)
 - **Search Providers**: Tavily Search API, Brave Search API, Serper Google API
 - **LLM Providers**: Anthropic Claude, OpenAI, Google Gemini, Groq, Ollama
-- **Frontend**: Clean vanilla JavaScript and CSS (editorial dark mode, zero frontend frameworks or build steps required)
+- **Frontend**: Editorial dark UI in pure vanilla TypeScript/HTML/CSS (zero frontend dependencies or heavy bundles)
 
 ---
 
@@ -119,16 +119,18 @@ Every decision card provides:
 4. **Why Alternatives Were Rejected**: Concrete explanations for each rejected contender.
 5. **Discarded Fluff**: Marketing claims and buzzwords that were intentionally cut.
 6. **Source Citations**: Clickable links to every search result used to ground the research.
-7. **Decision History**: Instant access to your past runs stored in SQLite.
+7. **Decision History & Export**: Instant access to past runs in SQLite, Markdown export, and deletion.
 
 ---
 
 ## API Routes
 
-- `GET /`: Minimalist web application.
+- `GET /`: Editorial web application.
 - `GET /api/status`: System readiness and configured provider status.
 - `GET /api/decisions`: List recent decisions from SQLite history.
 - `GET /api/decisions/:id`: Retrieve full decision report by ID.
+- `GET /api/decisions/:id/export`: Download decision report as Markdown.
+- `DELETE /api/decisions/:id`: Delete a saved decision record.
 - `POST /api/decisions`: Submit a new research decision (`{ topic: string, constraints?: string }`).
 
 ---

@@ -75,7 +75,7 @@ export function saveDecision(record: DecisionRecord): void {
   });
 }
 
-export function listRecentDecisions(limit: number = 20): Array<{
+export function listRecentDecisions(limit: number = 30): Array<{
   id: string;
   topic: string;
   constraints?: string;
@@ -127,4 +127,13 @@ export function getDecisionById(id: string): DecisionRecord | null {
     consensus: JSON.parse(row.consensus_json),
     matrix: JSON.parse(row.matrix_json),
   };
+}
+
+export function deleteDecisionById(id: string): boolean {
+  const db = getDatabase();
+  const stmt = db.prepare(`
+    DELETE FROM decisions WHERE id = ?
+  `);
+  const result = stmt.run(id);
+  return result.changes > 0;
 }

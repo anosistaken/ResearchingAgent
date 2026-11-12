@@ -3,7 +3,8 @@ import readline from 'readline';
 import { loadValidatedConfig, getSystemStatus } from './config.js';
 import { processDecision } from './evaluator.js';
 import { renderAppHtml } from './ui.js';
-import { listRecentDecisions, getDecisionById } from './db.js';
+import { listRecentDecisions, getDecisionById, deleteDecisionById } from './db.js';
+import { formatDecisionAsMarkdown } from './export.js';
 import { DecisionRequestSchema } from './types.js';
 
 const config = loadValidatedConfig();
@@ -55,13 +56,31 @@ function startHttpServer() {
 
     // 3. Decision History API (List recent decisions)
     if (req.method === 'GET' && url.pathname === '/api/decisions') {
-      const decisions = listRecentDecisions(25);
+      const decisions = listRecentDecisions(30);
       res.writeHead(200, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify({ decisions }));
       return;
     }
 
-    // 4. Decision Record Detail API
+    // 4. Export Decision as Markdown
+    if (req.method === 'GET' && url.pathname.startsWith('/api/decisions/') && url.pathname.endsWith('/export')) {
+      const id = url.pathname.replace('/api/decisions/', '').replace('/export', '');
+      const decision = getDecisionById(id);
+      if (!decision) {
+        res.writeHead(404, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: 'Decision not found' }));
+        return;
+      }
+      const markdown = formatDecisionAsMarkdown(decision);
+      res.writeHead(200, {
+        'Content-Type': 'text/markdown; charset=utf-8',
+        'Content-Disposition': `attachment; filename="greg-decision-${id}.md"`,
+      });
+      res.end(markdown);
+      return;
+    }
+
+    // 5. Decision Record Detail API
     if (req.method === 'GET' && url.pathname.startsWith('/api/decisions/')) {
       const id = url.pathname.replace('/api/decisions/', '');
       const decision = getDecisionById(id);
@@ -75,7 +94,21 @@ function startHttpServer() {
       return;
     }
 
-    // 5. Create Decision API
+    // 6. Delete Decision API
+    if (req.method === 'DELETE' && url.pathname.startsWith('/api/decisions/')) {
+      const id = url.pathname.replace('/api/decisions/', '');
+      const deleted = deleteDecisionById(id);
+      if (!deleted) {
+        res.writeHead(404, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: 'Decision not found' }));
+        return;
+      }
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ success: true }));
+      return;
+    }
+
+    // 7. Create Decision API
     if (req.method === 'POST' && url.pathname === '/api/decisions') {
       // Rate limit check
       if (!checkRateLimit(clientIp)) {

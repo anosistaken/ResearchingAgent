@@ -6,23 +6,29 @@ export function renderAppHtml(): string {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Greg: Direct Decision Engine</title>
   <meta name="description" content="Research available options, compare what actually matters, verify facts, and get one clear recommendation.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #09090b;
-      --card: #121215;
-      --card-muted: #18181c;
-      --border: #26262b;
-      --border-focus: #52525b;
-      --text: #f4f4f5;
-      --text-muted: #a1a1aa;
-      --text-dim: #71717a;
-      --accent: #fafafa;
-      --accent-bg: #27272a;
-      --tag-bg: #1c1c21;
-      --danger: #f87171;
-      --warning: #fbbf24;
-      --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-      --font-mono: "SF Mono", Menlo, Consolas, Monaco, monospace;
+      --bg: #0b0c0e;
+      --card: #121316;
+      --card-muted: #18191d;
+      --border: #22242a;
+      --border-hover: #32353e;
+      --border-focus: #525666;
+      --text: #f3f4f6;
+      --text-muted: #9ca3af;
+      --text-dim: #6b7280;
+      --accent: #f9fafb;
+      --accent-bg: #1f2127;
+      --tag-bg: #181a20;
+      --tag-border: #2a2d36;
+      --danger: #ef4444;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-mono: 'JetBrains Mono', "SF Mono", Menlo, Consolas, monospace;
     }
 
     * {
@@ -37,21 +43,25 @@ export function renderAppHtml(): string {
       font-family: var(--font-sans);
       line-height: 1.5;
       -webkit-font-smoothing: antialiased;
-      padding-bottom: 6rem;
+      padding-bottom: 7rem;
     }
 
-    /* Container */
+    ::selection {
+      background: #272a33;
+      color: #fff;
+    }
+
     .container {
-      max-width: 960px;
+      max-width: 980px;
       margin: 0 auto;
       padding: 0 1.5rem;
     }
 
-    /* Navigation Bar */
+    /* Top Bar */
     header {
       border-bottom: 1px solid var(--border);
-      background: rgba(9, 9, 11, 0.85);
-      backdrop-filter: blur(12px);
+      background: rgba(11, 12, 14, 0.82);
+      backdrop-filter: blur(16px);
       position: sticky;
       top: 0;
       z-index: 50;
@@ -67,7 +77,7 @@ export function renderAppHtml(): string {
     .logo {
       display: flex;
       align-items: center;
-      gap: 0.75rem;
+      gap: 0.65rem;
       text-decoration: none;
       color: var(--text);
     }
@@ -75,11 +85,11 @@ export function renderAppHtml(): string {
     .logo-badge {
       font-family: var(--font-mono);
       font-weight: 700;
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       background: var(--text);
       color: #000;
       padding: 0.15rem 0.45rem;
-      border-radius: 3px;
+      border-radius: 4px;
       letter-spacing: -0.02em;
     }
 
@@ -92,19 +102,20 @@ export function renderAppHtml(): string {
     .nav-actions {
       display: flex;
       align-items: center;
-      gap: 1rem;
+      gap: 1.25rem;
     }
 
     .status-pill {
       font-family: var(--font-mono);
       font-size: 0.72rem;
-      padding: 0.2rem 0.6rem;
+      padding: 0.22rem 0.65rem;
       border-radius: 9999px;
       border: 1px solid var(--border);
       display: flex;
       align-items: center;
-      gap: 0.4rem;
+      gap: 0.45rem;
       color: var(--text-muted);
+      background: var(--card);
     }
 
     .status-dot {
@@ -115,7 +126,8 @@ export function renderAppHtml(): string {
     }
 
     .status-dot.active {
-      background: #10b981;
+      background: var(--success);
+      box-shadow: 0 0 8px rgba(16, 185, 129, 0.4);
     }
 
     .status-dot.error {
@@ -134,7 +146,7 @@ export function renderAppHtml(): string {
       color: var(--text);
     }
 
-    /* Hero / Intro */
+    /* Hero */
     .hero {
       padding: 3.5rem 0 2rem;
       border-bottom: 1px solid var(--border);
@@ -143,9 +155,9 @@ export function renderAppHtml(): string {
 
     .hero-tag {
       font-family: var(--font-mono);
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.06em;
       color: var(--text-dim);
       margin-bottom: 0.75rem;
     }
@@ -153,30 +165,65 @@ export function renderAppHtml(): string {
     .hero h1 {
       font-size: 2.25rem;
       font-weight: 700;
-      letter-spacing: -0.04em;
-      line-height: 1.15;
+      letter-spacing: -0.035em;
+      line-height: 1.2;
       margin-bottom: 0.75rem;
+      color: #fff;
     }
 
     .hero p {
       font-size: 1.05rem;
       color: var(--text-muted);
-      max-width: 680px;
+      max-width: 720px;
+      line-height: 1.6;
     }
 
-    /* System Configuration Alert Banner */
+    /* Quick Examples Chips */
+    .examples-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 1.25rem;
+    }
+
+    .examples-label {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--text-dim);
+      margin-right: 0.25rem;
+    }
+
+    .example-chip {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0.25rem 0.6rem;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .example-chip:hover {
+      border-color: var(--border-hover);
+      color: var(--text);
+      background: var(--card-muted);
+    }
+
+    /* Alert Banner */
     #system-alert {
       display: none;
-      background: rgba(248, 113, 113, 0.08);
-      border: 1px solid rgba(248, 113, 113, 0.25);
+      background: rgba(239, 68, 68, 0.06);
+      border: 1px solid rgba(239, 68, 68, 0.22);
       border-radius: 6px;
-      padding: 1rem 1.25rem;
+      padding: 1.1rem 1.35rem;
       margin-bottom: 2rem;
       font-size: 0.88rem;
     }
 
     #system-alert h3 {
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       font-family: var(--font-mono);
       color: var(--danger);
       margin-bottom: 0.35rem;
@@ -198,13 +245,14 @@ export function renderAppHtml(): string {
       border: 1px solid var(--border);
     }
 
-    /* Decision Input Form */
+    /* Form Section */
     .form-card {
       background: var(--card);
       border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 1.5rem;
+      border-radius: 8px;
+      padding: 1.6rem;
       margin-bottom: 2.5rem;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
     }
 
     .form-group {
@@ -215,7 +263,7 @@ export function renderAppHtml(): string {
       display: flex;
       justify-content: space-between;
       align-items: baseline;
-      font-size: 0.78rem;
+      font-size: 0.76rem;
       font-family: var(--font-mono);
       text-transform: uppercase;
       letter-spacing: 0.04em;
@@ -232,13 +280,13 @@ export function renderAppHtml(): string {
 
     input[type="text"], textarea {
       width: 100%;
-      background: #000;
+      background: #07080a;
       border: 1px solid var(--border);
       color: var(--text);
-      padding: 0.8rem 1rem;
+      padding: 0.85rem 1.05rem;
       font-size: 0.95rem;
       font-family: var(--font-sans);
-      border-radius: 4px;
+      border-radius: 6px;
       outline: none;
       transition: border-color 0.15s ease, box-shadow 0.15s ease;
     }
@@ -250,7 +298,8 @@ export function renderAppHtml(): string {
 
     textarea {
       resize: vertical;
-      min-height: 70px;
+      min-height: 72px;
+      line-height: 1.5;
     }
 
     .form-bottom {
@@ -273,17 +322,21 @@ export function renderAppHtml(): string {
       font-family: var(--font-sans);
       font-weight: 600;
       font-size: 0.85rem;
-      padding: 0.7rem 1.6rem;
-      border-radius: 4px;
+      padding: 0.72rem 1.7rem;
+      border-radius: 5px;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       gap: 0.5rem;
-      transition: opacity 0.15s ease;
+      transition: opacity 0.15s ease, transform 0.1s ease;
     }
 
     button.btn-primary:hover {
-      opacity: 0.9;
+      opacity: 0.92;
+    }
+
+    button.btn-primary:active {
+      transform: scale(0.99);
     }
 
     button.btn-primary:disabled {
@@ -291,13 +344,34 @@ export function renderAppHtml(): string {
       cursor: not-allowed;
     }
 
-    /* Loading Indicator */
+    button.btn-secondary {
+      background: transparent;
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      padding: 0.35rem 0.75rem;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    button.btn-secondary:hover {
+      border-color: var(--border-hover);
+      color: var(--text);
+    }
+
+    /* Loader */
     #loader {
       display: none;
       background: var(--card);
       border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 3rem 1.5rem;
+      border-radius: 8px;
+      padding: 3.5rem 1.5rem;
       text-align: center;
       margin-bottom: 2.5rem;
     }
@@ -308,8 +382,8 @@ export function renderAppHtml(): string {
       border: 2px solid var(--border);
       border-top-color: var(--text);
       border-radius: 50%;
-      animation: spin 0.7s linear infinite;
-      margin: 0 auto 1rem;
+      animation: spin 0.65s linear infinite;
+      margin: 0 auto 1.15rem;
     }
 
     @keyframes spin {
@@ -318,8 +392,8 @@ export function renderAppHtml(): string {
 
     .loader-title {
       font-weight: 600;
-      font-size: 0.95rem;
-      margin-bottom: 0.25rem;
+      font-size: 0.98rem;
+      margin-bottom: 0.35rem;
     }
 
     .loader-sub {
@@ -328,24 +402,24 @@ export function renderAppHtml(): string {
       color: var(--text-dim);
     }
 
-    /* Result Container */
+    /* Result View */
     #result-view {
       display: none;
       animation: fadeIn 0.2s ease;
     }
 
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(4px); }
+      from { opacity: 0; transform: translateY(6px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* Winner Card */
+    /* Winner Banner Card */
     .winner-card {
       background: var(--card);
-      border: 1px solid var(--text);
-      border-radius: 6px;
-      padding: 2rem;
-      margin-bottom: 2rem;
+      border: 1px solid #3b3f4d;
+      border-radius: 8px;
+      padding: 2.2rem;
+      margin-bottom: 2.2rem;
       position: relative;
     }
 
@@ -356,6 +430,12 @@ export function renderAppHtml(): string {
       margin-bottom: 1.25rem;
     }
 
+    .winner-badges-group {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
     .winner-badge {
       font-family: var(--font-mono);
       font-size: 0.72rem;
@@ -364,8 +444,18 @@ export function renderAppHtml(): string {
       letter-spacing: 0.05em;
       background: var(--text);
       color: #000;
+      padding: 0.22rem 0.6rem;
+      border-radius: 4px;
+    }
+
+    .confidence-badge {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
       padding: 0.2rem 0.55rem;
-      border-radius: 3px;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      background: var(--card-muted);
     }
 
     .meta-time {
@@ -375,39 +465,42 @@ export function renderAppHtml(): string {
     }
 
     .winner-name {
-      font-size: 2rem;
+      font-size: 2.2rem;
       font-weight: 700;
-      letter-spacing: -0.03em;
+      letter-spacing: -0.035em;
       line-height: 1.15;
       margin-bottom: 0.5rem;
+      color: #fff;
     }
 
     .winner-tagline {
-      font-size: 1.05rem;
+      font-size: 1.1rem;
       color: var(--text-muted);
-      margin-bottom: 1.5rem;
+      margin-bottom: 1.75rem;
+      line-height: 1.5;
     }
 
     .winner-section-title {
       font-family: var(--font-mono);
-      font-size: 0.75rem;
+      font-size: 0.74rem;
       text-transform: uppercase;
-      letter-spacing: 0.04em;
+      letter-spacing: 0.05em;
       color: var(--text-dim);
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.6rem;
     }
 
     .reasons-list {
       list-style-type: none;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1.75rem;
     }
 
     .reasons-list li {
       position: relative;
-      padding-left: 1.25rem;
-      margin-bottom: 0.5rem;
-      font-size: 0.92rem;
+      padding-left: 1.35rem;
+      margin-bottom: 0.6rem;
+      font-size: 0.95rem;
       color: var(--text);
+      line-height: 1.5;
     }
 
     .reasons-list li::before {
@@ -415,14 +508,15 @@ export function renderAppHtml(): string {
       position: absolute;
       left: 0;
       color: var(--text-dim);
+      font-weight: bold;
     }
 
     .tradeoff-box {
-      background: var(--card-muted);
+      background: #090a0d;
       border: 1px solid var(--border);
-      border-radius: 4px;
-      padding: 0.9rem 1.1rem;
-      font-size: 0.88rem;
+      border-radius: 6px;
+      padding: 1rem 1.25rem;
+      font-size: 0.9rem;
     }
 
     .tradeoff-label {
@@ -430,22 +524,34 @@ export function renderAppHtml(): string {
       font-size: 0.72rem;
       text-transform: uppercase;
       color: var(--text-dim);
-      margin-bottom: 0.25rem;
+      margin-bottom: 0.35rem;
+      letter-spacing: 0.04em;
     }
 
-    /* Comparison Matrix */
+    /* Result Action Bar */
+    .result-actions-bar {
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.6rem;
+      margin-top: 1.5rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--border);
+    }
+
+    /* Section Headers */
     .section-header {
       font-family: var(--font-mono);
-      font-size: 0.78rem;
+      font-size: 0.76rem;
       text-transform: uppercase;
       letter-spacing: 0.05em;
       color: var(--text-dim);
-      margin: 2.5rem 0 0.85rem;
+      margin: 2.75rem 0 0.85rem;
     }
 
+    /* Matrix Table */
     .matrix-wrapper {
       border: 1px solid var(--border);
-      border-radius: 6px;
+      border-radius: 8px;
       overflow-x: auto;
       background: var(--card);
       margin-bottom: 2rem;
@@ -459,10 +565,11 @@ export function renderAppHtml(): string {
     }
 
     th, td {
-      padding: 0.9rem 1.1rem;
+      padding: 0.95rem 1.2rem;
       border-bottom: 1px solid var(--border);
       border-right: 1px solid var(--border);
       vertical-align: top;
+      line-height: 1.5;
     }
 
     th:last-child, td:last-child {
@@ -474,7 +581,7 @@ export function renderAppHtml(): string {
     }
 
     th {
-      background: var(--card-muted);
+      background: #0d0e12;
       font-family: var(--font-mono);
       font-size: 0.75rem;
       text-transform: uppercase;
@@ -487,19 +594,19 @@ export function renderAppHtml(): string {
       font-family: var(--font-mono);
       font-size: 0.78rem;
       color: var(--text-dim);
-      background: rgba(0, 0, 0, 0.2);
+      background: rgba(0, 0, 0, 0.25);
       width: 25%;
     }
 
-    /* 3 Column Grid for Facts, Assumptions, Unknowns */
+    /* 3 Columns Grid */
     .grid-3 {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 1rem;
+      gap: 1.25rem;
       margin-bottom: 2rem;
     }
 
-    @media (max-width: 768px) {
+    @media (max-width: 820px) {
       .grid-3 {
         grid-template-columns: 1fr;
       }
@@ -508,31 +615,32 @@ export function renderAppHtml(): string {
     .info-card {
       background: var(--card);
       border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 1.25rem;
+      border-radius: 8px;
+      padding: 1.35rem;
     }
 
     .info-card h4 {
       font-family: var(--font-mono);
       font-size: 0.72rem;
       text-transform: uppercase;
-      letter-spacing: 0.04em;
+      letter-spacing: 0.05em;
       color: var(--text-dim);
-      margin-bottom: 0.75rem;
+      margin-bottom: 0.85rem;
       border-bottom: 1px solid var(--border);
       padding-bottom: 0.5rem;
     }
 
     .info-card ul {
       list-style-type: none;
-      font-size: 0.82rem;
+      font-size: 0.84rem;
       color: var(--text-muted);
+      line-height: 1.5;
     }
 
     .info-card ul li {
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.6rem;
       position: relative;
-      padding-left: 1rem;
+      padding-left: 1.15rem;
     }
 
     .info-card ul li::before {
@@ -542,11 +650,11 @@ export function renderAppHtml(): string {
       color: var(--text-dim);
     }
 
-    /* Rejected Alternatives & Fluff */
+    /* 2 Columns Grid */
     .grid-2 {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 1rem;
+      gap: 1.25rem;
       margin-bottom: 2rem;
     }
 
@@ -560,33 +668,34 @@ export function renderAppHtml(): string {
     .sources-card {
       background: var(--card);
       border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 1.25rem;
+      border-radius: 8px;
+      padding: 1.35rem;
       margin-bottom: 2rem;
     }
 
     .sources-list {
       display: flex;
       flex-direction: column;
-      gap: 0.6rem;
-      margin-top: 0.75rem;
+      gap: 0.65rem;
+      margin-top: 0.85rem;
     }
 
     .source-item {
       display: flex;
       align-items: baseline;
       gap: 0.75rem;
-      font-size: 0.82rem;
+      font-size: 0.84rem;
     }
 
     .source-index {
       font-family: var(--font-mono);
       font-size: 0.7rem;
       background: var(--card-muted);
-      padding: 0.1rem 0.4rem;
+      padding: 0.1rem 0.45rem;
       border-radius: 3px;
       border: 1px solid var(--border);
       color: var(--text-dim);
+      flex-shrink: 0;
     }
 
     .source-link {
@@ -607,44 +716,52 @@ export function renderAppHtml(): string {
       font-family: var(--font-mono);
       font-size: 0.72rem;
       color: var(--text-dim);
+      flex-shrink: 0;
     }
 
-    /* Decision History Drawer / Section */
+    /* History Section */
     .history-section {
       border-top: 1px solid var(--border);
-      padding-top: 2rem;
-      margin-top: 3rem;
+      padding-top: 2.5rem;
+      margin-top: 3.5rem;
+    }
+
+    .history-top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
     }
 
     .history-list {
       display: flex;
       flex-direction: column;
-      gap: 0.6rem;
-      margin-top: 0.85rem;
+      gap: 0.65rem;
     }
 
     .history-item {
       background: var(--card);
       border: 1px solid var(--border);
-      border-radius: 4px;
-      padding: 0.85rem 1.1rem;
+      border-radius: 6px;
+      padding: 0.95rem 1.25rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
       cursor: pointer;
-      transition: border-color 0.15s ease;
+      transition: all 0.15s ease;
       text-decoration: none;
       color: var(--text);
     }
 
     .history-item:hover {
-      border-color: var(--border-focus);
+      border-color: var(--border-hover);
+      background: var(--card-muted);
     }
 
     .history-topic {
       font-weight: 500;
-      font-size: 0.9rem;
-      margin-bottom: 0.2rem;
+      font-size: 0.92rem;
+      margin-bottom: 0.25rem;
     }
 
     .history-meta {
@@ -659,6 +776,47 @@ export function renderAppHtml(): string {
       color: var(--text);
       text-align: right;
     }
+
+    .history-delete-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-dim);
+      cursor: pointer;
+      font-size: 0.9rem;
+      padding: 0.2rem 0.5rem;
+      border-radius: 3px;
+      transition: color 0.15s ease;
+      margin-left: 0.75rem;
+    }
+
+    .history-delete-btn:hover {
+      color: var(--danger);
+    }
+
+    /* Toast Notification */
+    #toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #18191d;
+      border: 1px solid var(--border-hover);
+      color: var(--text);
+      font-size: 0.82rem;
+      font-family: var(--font-mono);
+      padding: 0.65rem 1.1rem;
+      border-radius: 6px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all 0.2s ease;
+      pointer-events: none;
+      z-index: 100;
+    }
+
+    #toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
   </style>
 </head>
 <body>
@@ -667,7 +825,7 @@ export function renderAppHtml(): string {
     <div class="container header-inner">
       <a href="/" class="logo">
         <span class="logo-badge">GREG</span>
-        <span class="logo-title">Decision Agent</span>
+        <span class="logo-title">Decision Engine</span>
       </a>
       <div class="nav-actions">
         <div id="system-status-pill" class="status-pill">
@@ -675,6 +833,7 @@ export function renderAppHtml(): string {
           <span id="status-text">Checking status...</span>
         </div>
         <a href="#history" class="nav-link">History</a>
+        <a href="https://github.com/anosistaken/ResearchingAgent" target="_blank" rel="noopener noreferrer" class="nav-link">GitHub</a>
       </div>
     </div>
   </header>
@@ -684,9 +843,16 @@ export function renderAppHtml(): string {
       <div class="hero-tag">Direct AI Evaluation</div>
       <h1>Cut research time. Get one clear recommendation.</h1>
       <p>Greg finds the top contenders, compares factors that actually affect real production use, throws out marketing fluff, and states what is verified vs uncertain.</p>
+      
+      <div class="examples-bar">
+        <span class="examples-label">Try:</span>
+        <button type="button" class="example-chip" onclick="setExample('PostgreSQL vs MongoDB vs ClickHouse for high-write event logs', 'Solo developer, under $100/mo cloud cost, 15M writes/day, no Kubernetes')">High-Write Database</button>
+        <button type="button" class="example-chip" onclick="setExample('Next.js vs Remix vs Vite SPA for a fast internal dashboard', 'Solo dev, fast turnaround, minimal server maintenance')">Frontend Stack</button>
+        <button type="button" class="example-chip" onclick="setExample('Hetzner VPS vs AWS ECS vs Fly.io for hosting Docker services', 'Budget under $50/mo, 3 microservices, predictable billing')">Cloud Infrastructure</button>
+      </div>
     </section>
 
-    <!-- Configuration Warning Banner (Shown if API keys missing) -->
+    <!-- Configuration Needed Banner -->
     <div id="system-alert">
       <h3 id="alert-title">Configuration Needed</h3>
       <p id="alert-msg">Missing server environment keys.</p>
@@ -729,7 +895,7 @@ export function renderAppHtml(): string {
         </div>
 
         <div class="form-bottom">
-          <div id="engine-hint" class="active-engine-info">Loading active engine...</div>
+          <div id="engine-hint" class="active-engine-info">Checking server readiness...</div>
           <button type="submit" id="submit-btn" class="btn-primary">
             <span>Decide for me</span>
           </button>
@@ -749,7 +915,10 @@ export function renderAppHtml(): string {
       <!-- Winner Card -->
       <div class="winner-card">
         <div class="winner-top">
-          <span class="winner-badge">Recommended Pick</span>
+          <div class="winner-badges-group">
+            <span class="winner-badge">Recommended Pick</span>
+            <span id="res-confidence" class="confidence-badge"></span>
+          </div>
           <span id="res-meta" class="meta-time"></span>
         </div>
         <h2 id="res-winner" class="winner-name"></h2>
@@ -761,6 +930,15 @@ export function renderAppHtml(): string {
         <div class="tradeoff-box">
           <div class="tradeoff-label">Accepted Trade-off</div>
           <div id="res-tradeoff"></div>
+        </div>
+
+        <div class="result-actions-bar">
+          <button type="button" class="btn-secondary" onclick="copyShareSummary()">
+            <span>Copy summary</span>
+          </button>
+          <a id="export-md-btn" href="#" class="btn-secondary" download>
+            <span>Download .md</span>
+          </a>
         </div>
       </div>
 
@@ -810,14 +988,20 @@ export function renderAppHtml(): string {
 
     <!-- History Section -->
     <section id="history" class="history-section">
-      <div class="section-header">Recent Decision History</div>
+      <div class="history-top-bar">
+        <div class="section-header" style="margin: 0;">Recent Decision History</div>
+      </div>
       <div id="history-container" class="history-list">
         <div class="history-meta">No saved decisions yet.</div>
       </div>
     </section>
   </main>
 
+  <div id="toast">Copied to clipboard</div>
+
   <script>
+    let currentDecision = null;
+
     const form = document.getElementById('decision-form');
     const topicInput = document.getElementById('topic');
     const constraintsInput = document.getElementById('constraints');
@@ -830,6 +1014,20 @@ export function renderAppHtml(): string {
     const statusText = document.getElementById('status-text');
     const engineHint = document.getElementById('engine-hint');
     const historyContainer = document.getElementById('history-container');
+    const toast = document.getElementById('toast');
+    const exportMdBtn = document.getElementById('export-md-btn');
+
+    function showToast(msg) {
+      toast.textContent = msg;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2000);
+    }
+
+    function setExample(topic, constraints) {
+      topicInput.value = topic;
+      constraintsInput.value = constraints;
+      topicInput.focus();
+    }
 
     // 1. Fetch system status
     async function checkStatus() {
@@ -863,15 +1061,20 @@ export function renderAppHtml(): string {
         if (data.decisions && data.decisions.length > 0) {
           historyContainer.innerHTML = data.decisions.map(d => \`
             <div class="history-item" onclick="loadSingleDecision('\${d.id}')">
-              <div>
+              <div style="flex: 1; min-width: 0;">
                 <div class="history-topic">\${escapeHtml(d.topic)}</div>
                 <div class="history-meta">\${new Date(d.createdAt).toLocaleDateString()} • \${d.executionTimeMs}ms • Confidence: \${d.confidence}</div>
               </div>
-              <div class="history-winner">
-                <span>Pick: <strong>\${escapeHtml(d.winner)}</strong></span>
+              <div style="display: flex; align-items: center; gap: 0.5rem;">
+                <div class="history-winner">
+                  <span>Pick: <strong>\${escapeHtml(d.winner)}</strong></span>
+                </div>
+                <button class="history-delete-btn" title="Delete record" onclick="deleteHistoryItem(event, '\${d.id}')">✕</button>
               </div>
             </div>
           \`).join('');
+        } else {
+          historyContainer.innerHTML = '<div class="history-meta">No saved decisions yet.</div>';
         }
       } catch (err) {
         console.error('Failed to load history', err);
@@ -887,6 +1090,24 @@ export function renderAppHtml(): string {
         }
       } catch (err) {
         alert('Could not load decision: ' + err.message);
+      }
+    }
+
+    async function deleteHistoryItem(event, id) {
+      event.stopPropagation();
+      if (!confirm('Delete this saved decision?')) return;
+
+      try {
+        const res = await fetch(\`/api/decisions/\${id}\`, { method: 'DELETE' });
+        if (res.ok) {
+          showToast('Decision deleted');
+          loadHistory();
+          if (currentDecision && currentDecision.id === id) {
+            resultView.style.display = 'none';
+          }
+        }
+      } catch (err) {
+        alert('Delete failed: ' + err.message);
       }
     }
 
@@ -926,12 +1147,16 @@ export function renderAppHtml(): string {
     });
 
     function renderDecision(record) {
+      currentDecision = record;
       const c = record.consensus;
 
       // Header & Winner
       document.getElementById('res-winner').textContent = c.winner;
       document.getElementById('res-tagline').textContent = c.tagline;
-      document.getElementById('res-meta').textContent = \`\${record.executionTimeMs}ms • Confidence: \${c.confidence} • \${record.engineUsed}\`;
+      document.getElementById('res-confidence').textContent = \`Confidence: \${c.confidence}\`;
+      document.getElementById('res-meta').textContent = \`\${record.executionTimeMs}ms • \${record.engineUsed}\`;
+
+      exportMdBtn.href = \`/api/decisions/\${record.id}/export\`;
 
       // Why it wins
       const reasonsList = document.getElementById('res-reasons');
@@ -946,7 +1171,7 @@ export function renderAppHtml(): string {
 
       thead.innerHTML = \`
         <tr>
-          <th>Evaluation Metric</th>
+          <th>Evaluation Factor</th>
           \${record.matrix.options.map(opt => \`<th>\${escapeHtml(opt)}</th>\`).join('')}
         </tr>
       \`;
@@ -979,6 +1204,19 @@ export function renderAppHtml(): string {
 
       resultView.style.display = 'block';
       resultView.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function copyShareSummary() {
+      if (!currentDecision) return;
+      const c = currentDecision.consensus;
+      const text = \`GREG DECISION: \${currentDecision.topic}
+Recommended Pick: \${c.winner}
+Why: \${c.tagline}
+Trade-off: \${c.mainTradeoff}\`;
+
+      navigator.clipboard.writeText(text).then(() => {
+        showToast('Summary copied to clipboard');
+      });
     }
 
     function escapeHtml(str) {
