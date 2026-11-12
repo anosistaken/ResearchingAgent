@@ -793,14 +793,14 @@ export function renderAppHtml(): string {
       color: var(--danger);
     }
 
-    /* Toast & Floating Notification Banner */
+    /* Toast & Floating Notification Banner (Bottom Right) */
     #toast-container {
       position: fixed;
-      top: 24px;
+      bottom: 24px;
       right: 24px;
       z-index: 9999;
       display: flex;
-      flex-direction: column;
+      flex-direction: column-reverse;
       gap: 0.75rem;
       max-width: 440px;
       width: calc(100vw - 48px);
@@ -817,7 +817,7 @@ export function renderAppHtml(): string {
       display: flex;
       align-items: flex-start;
       gap: 0.85rem;
-      transform: translateY(-8px);
+      transform: translateY(8px);
       opacity: 0;
       transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
     }
