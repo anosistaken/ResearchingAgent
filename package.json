@@ -1,0 +1,31 @@
+{
+  "name": "greg-researcher",
+  "version": "1.0.0",
+  "description": "Greg: No-bullshit multi-LLM research and decision agent.",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "tsx src/index.ts",
+    "sync": "tsx src/sync.ts"
+  },
+  "keywords": [
+    "research",
+    "decision-making",
+    "ai-agent",
+    "comparison"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "better-sqlite3": "^13.1.1",
+    "dotenv": "^16.4.7",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^9.6.0",
+    "@types/node": "^22.13.9",
+    "tsx": "^4.19.3",
+    "typescript": "^5.7.3"
+  }
+}
